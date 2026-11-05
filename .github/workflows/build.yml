@@ -1,4 +1,4 @@
-name: Build Lingo Quest APK
+name: Build EPLS Stable Ver1.4.0
 
 on:
   push:
@@ -26,20 +26,12 @@ jobs:
       - name: Install Android SDK
         run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
       - name: Unpack app source
-        run: unzip -q EPLS_Ver1_4_3_source.zip
-      - name: Apply EPLS 1.4.4 readability and stability repairs
-        run: |
-          python3 - <<'PY'
-          import base64, zlib, subprocess
-          with open("scripts/epls144.patch.b64", "rb") as f:
-              patch = zlib.decompress(base64.b64decode(f.read()))
-          subprocess.run(["patch", "-p0"], input=patch, check=True)
-          PY
+        run: unzip -q EPLS_Ver1_4_source.zip
       - name: Compile APK
         run: cd LingoQuest_Ver1_1_Android && gradle :app:assembleDebug --no-daemon
       - name: Downloadable APK
         uses: actions/upload-artifact@v4
         with:
-          name: EPLS-Ver1.4.4-APK
+          name: EPLS-Stable-Ver1.4.0-APK
           path: LingoQuest_Ver1_1_Android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
